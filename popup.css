@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
+
+body {
+    width: 380px;
+    height: 500px;
+    margin: 0;
+    font-family: 'Vazirmatn', sans-serif;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    direction: rtl;
+}
+
+.header {
+    background-color: #21394f;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    position: sticky; top: 0; z-index: 10;
+}
+
+h1 { font-size: 16px; margin: 0; color: #fff; font-weight: 700; }
+#refreshBtn { background: none; border: none; color: #4CAF50; font-size: 20px; cursor: pointer; }
+#refreshBtn:hover { transform: rotate(180deg); color: #fff; }
+#stats-bar { padding: 8px; font-size: 11px; color: #888; background: #252525; text-align: center; border-bottom: 1px solid #333; }
+#container { padding-bottom: 20px; }
+
+/* CARD STYLES */
+.card {
+    background-color: #2d2d2d;
+    margin: 10px 15px;
+    padding: 12px;
+    border-radius: 8px;
+    border-right: 4px solid #ffbb33;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.card-header { display: flex; flex-direction: column; gap: 4px; }
+.header-top { display: flex; justify-content: space-between; align-items: center; }
+.course-name { font-size: 11px; color: #aaa; }
+.task-title { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.4; }
+
+.card-body { overflow: hidden; }
+
+.meta-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 5px; border-top: 1px solid #3c3c3c; padding-top: 8px;
+}
+
+.deadline { font-size: 11px; color: #ffbb33; font-weight: 500; }
+.action-btn { background-color: #0d6efd; color: white; text-decoration: none; padding: 4px 12px; border-radius: 4px; font-size: 11px; }
+
+/* DONE & MINIMIZED STATES */
+.card.done {
+    border-right-color: #00C851;
+    background-color: #222;
+    cursor: pointer;
+}
+
+/* When minimized, hide the body (date and button) */
+.card.minimized .card-body { display: none; }
+
+/* Make minimized cards simpler */
+.card.minimized {
+    padding: 8px 12px;
+    opacity: 0.7;
+    border-right-width: 2px;
+}
+.card.minimized:hover { opacity: 1; background-color: #2a2a2a; }
+
+.mini-tag {
+    font-size: 10px; background: #004d1f; color: #00C851;
+    padding: 1px 6px; border-radius: 4px;
+}
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 40px 20px; color: #888; font-size: 13px; line-height: 1.8; }
+.empty-state-icon { font-size: 40px; margin-bottom: 10px; display: block; opacity: 0.5; }
+.highlight { color: #4CAF50; font-weight: bold; }
+.hidden { display: none !important; }
+
+#loading {
+    text-align: center;
+    padding: 10px;
+    color: #ffbb33;
+    font-size: 12px;
+    background-color: #252525;
+    transition: background-color 0.3s;
+}
