@@ -10,84 +10,75 @@ body {
     direction: rtl;
 }
 
+/* HEADER & UTILS */
 .header {
     background-color: #21394f;
     padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     border-bottom: 1px solid #333;
     position: sticky; top: 0; z-index: 10;
 }
-
 h1 { font-size: 16px; margin: 0; color: #fff; font-weight: 700; }
-#refreshBtn { background: none; border: none; color: #4CAF50; font-size: 20px; cursor: pointer; }
+#refreshBtn { background: none; border: none; color: #4CAF50; font-size: 20px; cursor: pointer; transition: transform 0.3s; }
 #refreshBtn:hover { transform: rotate(180deg); color: #fff; }
 #stats-bar { padding: 8px; font-size: 11px; color: #888; background: #252525; text-align: center; border-bottom: 1px solid #333; }
-#container { padding-bottom: 20px; }
+#container { padding: 15px 10px; padding-bottom: 20px; display: flex; flex-direction: column; gap: 15px; }
+.hidden { display: none !important; }
+#loading { text-align: center; padding: 10px; color: #ffbb33; font-size: 12px; background-color: #252525; }
 
-/* CARD STYLES */
-.card {
+/* --- NEW GROUPED STYLES --- */
+
+/* The container for one course and its tasks */
+.course-group {
     background-color: #2d2d2d;
-    margin: 10px 15px;
-    padding: 12px;
     border-radius: 8px;
-    border-right: 4px solid #ffbb33;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* The header showing the course name once */
+.course-group-header {
+    background-color: #2c435a; /* Slightly lighter than main header */
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #ccc;
+    font-weight: 600;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+/* Individual task items inside the group */
+.task-row {
+    padding: 10px 12px;
+    border-bottom: 1px solid #3c3c3c;
+    border-right: 4px solid #ffbb33; /* Default Yellow (Soon) */
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    transition: all 0.2s ease;
+    gap: 6px;
+    background-color: #2d2d2d;
 }
+.task-row:last-child { border-bottom: none; }
 
-.card-header { display: flex; flex-direction: column; gap: 4px; }
-.header-top { display: flex; justify-content: space-between; align-items: center; }
-.course-name { font-size: 11px; color: #aaa; }
-.task-title { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.4; }
+/* Task Header (Title + Status Tag) */
+.task-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;}
+.task-title { font-size: 13px; font-weight: 600; color: #fff; line-height: 1.4; flex-grow: 1; }
 
-.card-body { overflow: hidden; }
+/* Task Meta (Date + Button) */
+.task-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 2px; }
+.deadline { font-size: 11px; color: #ffbb33; font-weight: 500; display: flex; align-items: center; gap: 4px;}
+.action-btn { background-color: #3a3a3a; color: #0d6efd; text-decoration: none; padding: 2px 8px; border-radius: 4px; font-size: 11px; border: 1px solid #0d6efd; transition: all 0.2s;}
+.action-btn:hover { background-color: #0d6efd; color: white; }
 
-.meta-row {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 5px; border-top: 1px solid #3c3c3c; padding-top: 8px;
-}
-
-.deadline { font-size: 11px; color: #ffbb33; font-weight: 500; }
-.action-btn { background-color: #0d6efd; color: white; text-decoration: none; padding: 4px 12px; border-radius: 4px; font-size: 11px; }
-
-/* DONE & MINIMIZED STATES */
-.card.done {
-    border-right-color: #00C851;
-    background-color: #222;
-    cursor: pointer;
-}
-
-/* When minimized, hide the body (date and button) */
-.card.minimized .card-body { display: none; }
-
-/* Make minimized cards simpler */
-.card.minimized {
-    padding: 8px 12px;
+/* DONE STATE */
+.task-row.done {
+    border-right-color: #00C851; /* Green Border */
     opacity: 0.7;
-    border-right-width: 2px;
 }
-.card.minimized:hover { opacity: 1; background-color: #2a2a2a; }
+.task-row.done .task-title { color: #aaa; text-decoration: line-through; }
+.task-row.done .deadline { color: #00C851; }
 
-.mini-tag {
-    font-size: 10px; background: #004d1f; color: #00C851;
-    padding: 1px 6px; border-radius: 4px;
-}
+.mini-tag { font-size: 9px; background: #004d1f; color: #00C851; padding: 2px 6px; border-radius: 4px; white-space: nowrap;}
 
 /* EMPTY STATE */
 .empty-state { text-align: center; padding: 40px 20px; color: #888; font-size: 13px; line-height: 1.8; }
 .empty-state-icon { font-size: 40px; margin-bottom: 10px; display: block; opacity: 0.5; }
 .highlight { color: #4CAF50; font-weight: bold; }
-.hidden { display: none !important; }
-
-#loading {
-    text-align: center;
-    padding: 10px;
-    color: #ffbb33;
-    font-size: 12px;
-    background-color: #252525;
-    transition: background-color 0.3s;
-}
