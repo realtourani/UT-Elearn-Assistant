@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "UT Elearn Assistant",
+  "version": "1.0",
+  "description": "Smart assignment tracker for University of Tehran.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://elearn.ut.ac.ir/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon128.png",
+      "48": "icons/icon128.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+      "16": "icons/icon128.png",
+      "48": "icons/icon128.png",
+      "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://elearn.ut.ac.ir/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
