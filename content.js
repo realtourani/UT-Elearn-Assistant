@@ -1,4 +1,23 @@
+// content.js - v9.1 (Clean Names)
 console.log("UT Elearn: Scraper Active");
+
+// --- Helper: Clean up messy course names ---
+function cleanCourseName(rawName) {
+    if (!rawName) return "درس نامشخص";
+
+    // 1. Remove the static label "نام درس" if present
+    let clean = rawName.replace("نام درس", "").replace("Course Name", "");
+
+    // 2. Split by newlines (fixes duplicates like "Algo\nAlgo")
+    // We take the first non-empty line, which is usually the main title.
+    const lines = clean.split(/\n+/).map(l => l.trim()).filter(l => l.length > 0);
+    
+    if (lines.length > 0) {
+        return lines[0];
+    }
+    
+    return clean.trim();
+}
 
 async function fetchAssignmentsFromIndex(courseId, courseName) {
     const indexUrl = `https://elearn.ut.ac.ir/mod/assign/index.php?id=${courseId}`;
@@ -8,7 +27,6 @@ async function fetchAssignmentsFromIndex(courseId, courseName) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(text, 'text/html');
 
-        // Check for login page (Session expired)
         if (doc.title.includes("Login") || doc.title.includes("ورود")) {
             return null; 
         }
@@ -25,7 +43,6 @@ async function fetchAssignmentsFromIndex(courseId, courseName) {
             let dateString = "نامشخص";
             let isSubmitted = false;
 
-            // Date Extraction
             const dateCell = row.querySelector('td[data-mdl-overview-item="duedate"]');
             if (dateCell) {
                 dateString = dateCell.innerText.trim(); 
@@ -35,7 +52,6 @@ async function fetchAssignmentsFromIndex(courseId, courseName) {
             }
             dateString = dateString.replace(/[\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
 
-            // Status Check
             const statusCell = row.querySelector('td[data-mdl-overview-item="submissionstatus"]');
             const rowText = row.innerText;
             if (statusCell) {
@@ -46,7 +62,7 @@ async function fetchAssignmentsFromIndex(courseId, courseName) {
 
             if (!assignments.find(a => a.link === link)) {
                 assignments.push({
-                    courseName: courseName,
+                    courseName: courseName, // Now using the cleaned name
                     name: name,
                     link: link,
                     dateString: dateString,
@@ -62,11 +78,10 @@ async function fetchAssignmentsFromIndex(courseId, courseName) {
 }
 
 async function scanDashboard() {
-    // 1. Find Course Cards directly on the page
     const courseElements = document.querySelectorAll('.course-card, [data-region="course-content"]');
     
     if (courseElements.length === 0) {
-        console.log("No courses found. Please ensure you are on https://elearn.ut.ac.ir/my/courses.php");
+        console.log("No courses found. Ensure you are on the dashboard.");
         return;
     }
 
@@ -75,8 +90,12 @@ async function scanDashboard() {
     courseElements.forEach(el => {
         const courseId = el.getAttribute('data-course-id');
         let courseName = "Course " + courseId;
+        
         const nameEl = el.querySelector('.coursename, .multiline');
-        if (nameEl) courseName = nameEl.innerText.trim();
+        if (nameEl) {
+            // Apply the cleaning function here
+            courseName = cleanCourseName(nameEl.innerText);
+        }
 
         if (courseId) {
             fetchPromises.push(fetchAssignmentsFromIndex(courseId, courseName));
@@ -85,7 +104,6 @@ async function scanDashboard() {
 
     const results = await Promise.all(fetchPromises);
     
-    // Safety check: if any result is null, session is invalid
     if (results.some(r => r === null)) {
         try { chrome.runtime.sendMessage({action: "session_expired"}); } catch(e){}
         return; 
@@ -93,7 +111,6 @@ async function scanDashboard() {
 
     const allAssignments = results.flat();
 
-    // Save Data
     chrome.storage.local.set({ 
         'ut_assignments': allAssignments,
         'last_updated': new Date().getTime() 
