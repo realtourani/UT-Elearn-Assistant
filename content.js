@@ -1,4 +1,3 @@
-// content.js - v9.1 (Clean Names)
 console.log("UT Elearn: Scraper Active");
 
 // --- Helper: Clean up messy course names ---
