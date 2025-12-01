@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="header">
+        <h1>تکالیف دانشگاه</h1>
+        <button id="refreshBtn" title="بروزرسانی">⟳</button>
+    </div>
+
+    <div id="stats-bar">...</div>
+    <div id="loading" class="hidden">در حال دریافت اطلاعات...</div>
+
+    <div id="container"></div>
+    
+    <div class="empty-state hidden" id="empty-state">
+        <span class="empty-state-icon">📂</span>
+        هیچ تکلیفی یافت نشد.<br>
+        <span class="highlight">1. وارد داشبورد دانشگاه شوید و یا صفحه را رفرش کنید.</span><br>
+        <span class="highlight">2. دکمه بروزرسانی (⟳) بالا را بزنید.</span>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
